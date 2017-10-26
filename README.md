@@ -1,9 +1,7 @@
 # longjmp_win64
 
-### a setjmp/longjmp minimalist replacement for win64/vs2013/vs2015
-
 #### What?
-This is a custom-made minimalist replacement for the `setjmp` and `longjmp` library calls, specifically for 64-bit windows applications.
+This is a minimalist replacement for the `setjmp` and `longjmp` library calls, specifically for 64-bit windows applications compiled with vs2013/vs2015 and onward (though not yet tested with vs2017).
 
 #### Why?
 In the past it had been possible to exploit the behavior of setjmp/longjmp for the purpose of implementing coroutines, cooperative threads, and things of that nature.  One could even get the behavior consistent across win32, iOS, Android (NDK), and OSX.  In more recent times, changes to the implementation of those functions mean that it is no longer possible to use the vendor supplied versions of them for that purpose.
@@ -54,6 +52,7 @@ Amazon: https://www.amazon.ca/dp/0133769402  -- Very expensive, but if you're se
 
 #### Future Plans
 * additional custom implementations of `setjmp` and `longjmp` for various platforms and bitness levels
+* support for other 64 Windows compilers (eg. mingw-w64)
 * a wrapper with unified interface (eg. `setjmp_custom` and `longjmp_custom` that automatically maps to the correct name/implementation for your target platform)
 * sample code demonstrating a simple OO implementation of coroutines or cooperative threads
 
