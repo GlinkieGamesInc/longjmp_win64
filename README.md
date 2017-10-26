@@ -58,8 +58,8 @@ Amazon: https://www.amazon.ca/dp/0133769402  -- Very expensive, but if you're se
 
 
 #### License
-This software was written by Paul Glinker - Glinkie Games Inc.,
-and is licensed under the Apache License, Version 2.0 ...
+Written by Paul Glinker - Glinkie Games Inc.
+
 ```
 Copyright 2017 Glinkie Games Inc.
 
@@ -75,4 +75,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-
