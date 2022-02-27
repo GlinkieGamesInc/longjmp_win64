@@ -1,12 +1,12 @@
 # longjmp_win64
 
 #### What?
-This is a minimalist replacement for the `setjmp` and `longjmp` library calls, specifically for 64-bit windows applications compiled with vs2013/vs2015 and onward (though not yet tested with vs2017).
+This is a minimalist replacement for the `setjmp` and `longjmp` library calls, specifically for 64-bit windows applications compiled with vs2013 or later (tested up to vs2019).
 
 #### Why?
-In the past it had been possible to exploit the behavior of setjmp/longjmp for the purpose of implementing coroutines, cooperative threads, and things of that nature.  One could even get the behavior consistent across win32, iOS, Android (NDK), and OSX.  In more recent times, changes to the implementation of those functions mean that it is no longer possible to use the vendor supplied versions of them for that purpose.
+In the past it had been possible to exploit the behavior of setjmp/longjmp for the purpose of implementing coroutines, cooperative threads, async, and things of that nature.  One could even get the behavior consistent across win32, iOS, Android (NDK), and OSX.  In more recent times, changes to the implementation of those functions mean that it is no longer possible to use the vendor supplied versions of them for that purpose.
 
-#### What changed in the setjmp/longjmp functions provided by vs2013/vs2015 for win64?
+#### What changed in the setjmp/longjmp functions provided by vs2013 (and later versions) for win64?
 
 The newer win64 implementations of `longjmp` appear to do some extra 'scope aware' things, like calling destructors, unwinding the stack, etc. in much the same way that a C++ exception would do.  That's probably a good thing if you're not doing anything creative with `longjmp`, however those new behaviors are detrimental to exploits that rely on a more minimalist implementation, where nothing interferes with the stack or it's data.
 
@@ -55,6 +55,10 @@ Amazon: https://www.amazon.ca/dp/0133769402  -- Very expensive, but if you're se
 * support for other 64 Windows compilers (eg. mingw-w64)
 * a wrapper with unified interface (eg. `setjmp_custom` and `longjmp_custom` that automatically maps to the correct name/implementation for your target platform)
 * sample code demonstrating a simple OO implementation of coroutines or cooperative threads
+
+
+#### Special Thanks
+Thank you to @eliotmiranda for identifying an inefficiency in the `get_rip` proc.
 
 
 #### License

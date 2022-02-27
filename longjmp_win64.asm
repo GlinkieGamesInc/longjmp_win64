@@ -36,8 +36,7 @@ TITLE longjmp_win64 - a replacement for setjmp/longjmp on win64 to allow the kin
 ;	note: this is a proc, so the instruction pointer was pushed onto
 ;         the stack before calling it. that's how we get it.
 get_rip PROC
-	mov	rdx, rsp
-	mov rax, [rdx]
+	mov rax, [rsp]
 	ret
 get_rip ENDP
 

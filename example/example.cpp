@@ -7,7 +7,7 @@
  *                  does not unwind the stack or destroy local objects
  *                  (the desired result in this case).
  *
- *       Intended with use with vs2013 or vs2015, x64 build target only.
+ *       Intended with use with vs2013 or later (tested up to vs2019), x64 build target only.
  *
  *
  * Written by Paul Glinker - Glinkie Games Inc.
