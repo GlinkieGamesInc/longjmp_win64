@@ -28,8 +28,13 @@ TITLE longjmp_win64 - a replacement for setjmp/longjmp on win64 to allow the kin
 ; limitations under the License.
 
 
+
+IFDEF RAX
+
 .code
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; x64
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Internal proc that gets the instruction pointer and puts it into rax.
@@ -132,4 +137,65 @@ longjmp_win64 PROC		; rcx has the address of the JMP_BUF_WIN64.  rdx has the ret
 	jmp r8
 longjmp_win64 ENDP
 
+
+ELSE	
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; x86
+
+.386
+.MODEL flat, C
+.code
+
+get_eip PROC
+	mov eax, [esp]
+	ret
+get_eip ENDP
+
+
+PUBLIC setjmp_win64
+setjmp_win64 PROC
+
+	mov         edx,dword ptr [esp+4]  
+	mov			eax,[esp]
+	mov			dword ptr [edx+18h],eax			; Save return address
+	mov         dword ptr [edx],ebp  
+	mov         dword ptr [edx+4],ebx  
+	mov         dword ptr [edx+8],edi  
+	mov         dword ptr [edx+0Ch],esi  
+	mov         dword ptr [edx+10h],esp  
+	call		get_eip
+	test		eax,eax
+	je			setjmp_return					; this will jump if we're returning from a long jump
+	mov         dword ptr [edx+14h],eax			; eip
+	xor			eax,eax
+	ret
+
+setjmp_return:
+	mov         ebp, dword ptr [edx]
+	mov         ebx, dword ptr [edx+4]
+	mov         edi, dword ptr [edx+8]
+	mov         esi, dword ptr [edx+0Ch]
+	mov         esp, dword ptr [edx+10h]
+	mov			edx, dword ptr [edx+18h]
+	mov			[esp],edx
+	mov			eax, ecx
+	ret
+	
+
+setjmp_win64 ENDP
+
+
+PUBLIC longjmp_win64
+longjmp_win64 PROC
+	mov         edx,dword ptr [esp+4]  
+	mov			ecx,dword ptr [esp+8]
+	mov         ebx,dword ptr [edx+14h]
+	xor			eax,eax
+	jmp			ebx
+longjmp_win64 ENDP
+
+ENDIF
+
 END
+

@@ -22,15 +22,44 @@
 #ifndef longjmp_win64_h
 #define longjmp_win64_h
 
-#ifndef _WIN64
-#error longjmp_win64 is an x64 library only.  please check your build configuration.
-#else // _WIN64
-
 #ifdef __cplusplus
 #include <string.h> // for memset function.  not used in C implementation, in which you are responsible for clearing any JMP_BUF_WIN64 yourself if necessary. 
 extern "C"
 {
 #endif // __cplusplus
+
+
+#ifndef _WIN64
+
+	// This struct has room for all of the registers and return addresses that we require.
+	typedef struct _JMP_BUF_WIN64
+	{
+		unsigned long Ebp;
+		unsigned long Ebx;
+		unsigned long Edi;
+		unsigned long Esi;
+		unsigned long Esp;
+		unsigned long Eip;
+		unsigned long RetAddr;
+	
+#ifdef __cplusplus
+		inline _JMP_BUF_WIN64(void)
+		{
+			memset(this, 0, sizeof(_JMP_BUF_WIN64));
+		}
+#endif // __cplusplus
+
+	} JMP_BUF_WIN64[1];
+
+
+	// Analogous to setjmp.
+	int setjmp_win64(JMP_BUF_WIN64 buff);
+
+	// Analogous to longjmp.
+	int longjmp_win64(JMP_BUF_WIN64 buff, int iReturnValue);
+
+
+#else // _WIN64
 
 	// This struct defines the type necessary to store an SE register.
 	typedef struct __declspec(align(16)) JMPBUF_FLOAT128
@@ -88,11 +117,11 @@ extern "C"
 	//   - never actually returns.
 	//   - warning: if you call this with an uninitialized buffer, your program will crash.
 	__int64 longjmp_win64(JMP_BUF_WIN64 buff, __int64 iReturnValue);
-	
+
+#endif // _WIN64
+
 #ifdef __cplusplus
 } // closing the extern "C"
 #endif // __cplusplus
-
-#endif // _WIN64
 
 #endif // longjmp_win64_h
